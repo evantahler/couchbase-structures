@@ -1,9 +1,14 @@
 # Couchbase Structures
 *compound data structures for couchbase built in node.js*
 
+[![Build Status](https://travis-ci.org/evantahler/couchbase-structures.png?branch=master)](https://travis-ci.org/evantahler/couchbase-structures)
+
 This project creates helpful wrappers around normal couchbase documents to allow you to create more complex objects.  Being couchbase, this means that your objects will be redundant and distributed!
 
 Note that this code it likley to be very buggy and slow.  You were warned!
+
+- **[GitHub](https://github.com/evantahler/couchbase-structures)**
+- **[NPM](https://npmjs.org/package/couchbase-structures)**
 
 ## Install
 

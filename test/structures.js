@@ -174,11 +174,12 @@ describe('couchbase', function(){
       obj.load(function(){
         var a = obj.metadata.updatedAt;
         setTimeout(function(){
-          obj.touch(function(){
-            obj.load(function(){
-              obj.metadata.updatedAt > a;
-              done();
-            });
+          obj.lockedUpdate(function(cb){
+            obj.touch();
+            cb();
+          }, function(err){
+            obj.metadata.updatedAt > a;
+            done();
           });
         }, 10);
       });
@@ -258,7 +259,7 @@ describe('couchbase', function(){
       });
     });
 
-    it("setting an element will increase lenght", function(done){
+    it("setting an element will increase length", function(done){
       var obj = new CouchbaseStructures.array("test", bucket);
       obj.load(function(){
         obj.length(function(err, length){

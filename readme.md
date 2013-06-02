@@ -1,14 +1,18 @@
 # Couchbase Structures
-*compund data sctuctures built in couchbse*
+*compound data structures for couchbase built in node.js*
 
 This project creates helpful wrappers around normal couchbase documents to allow you to create more complex objects.  Being couchbase, this means that your objects will be redundant and distributed!
 
 Note that this code it likley to be very buggy and slow.  You were warned!
 
+## Install
+
+`npm install couchbase-structures`
+
 ## Example
 ```javascript
 var couchbase = require("couchbase"); 
-var CouchbaseStructures = require("./index.js");
+var CouchbaseStructures = require("couchbase-structures");
 
 var couchbase_config = {
   debug    : false,
@@ -83,6 +87,20 @@ couchbase.connect(couchbase_config, function(err, bucket){
 ```
 
 You can run these tests from `demo.js`, which is included in this project.
+
+## Config
+
+The only configuration options are key seperators and timeout options.  You can overide the defaults like so:
+
+```javascript
+var CouchbaseStructures = require("couchbase-structures");
+CouchbaseStructures.structure.prototype.counterPrefix = function(){ return "_counter"; }
+CouchbaseStructures.structure.prototype.createPlaceholder = function(){ return "PLACEHOLDER"; }
+CouchbaseStructures.structure.prototype.keySeperator = function(){ return ":"; }
+CouchbaseStructures.structure.prototype.lockDuration = function(){ return 10; } // seconds
+CouchbaseStructures.structure.prototype.lockAttempts = function(){ return 10; }
+CouchbaseStructures.structure.prototype.lockWaitSleep = function(){ return 100; } // miliseconds
+```
 
 ## DSL
 

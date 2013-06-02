@@ -1,0 +1,22 @@
+{
+    "name": "couchbase-structures",
+    "version": "0.0.1",
+    "description": "compund data sctuctures built in couchbse",
+    "keywords": ["array, hash, list, queue, couch, couchbase"],
+    "repository": "https://github.com/evantahler/couchbase-structures.git",
+    "author": "Evan Tahler <evantahler@gmail.com>",
+    "dependencies": {
+        "couchbase": "x"
+    },
+    "devDependencies": {
+        "mocha" : "1.10.x",
+        "should": "1.2.x"
+    },
+    "main": "index.js",
+    "engines": {
+        "node": ">= 0.8.0"
+    },
+    "scripts": {
+        "test": "node ./node_modules/.bin/mocha --reporter spec"
+    }
+}

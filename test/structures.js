@@ -324,6 +324,19 @@ describe('couchbase', function(){
       });
     });
 
+    it("will error if the index is not a valid integer", function(done){
+      var obj = new CouchbaseStructures.array("test", bucket);
+      obj.load(function(){
+        obj.set(-1, {body: 'bad index'}, function(err){
+          String(err).should.equal("Error: index must be a postitive integer");
+          obj.set("words", {body: 'bad index'}, function(err){
+            String(err).should.equal("Error: index must be a postitive integer");
+            done();
+          });
+        });
+      });
+    });
+
     it("can be delted and will remove all children", function(done){
       var obj = new CouchbaseStructures.array("test", bucket);
       obj.destroy(function(err){

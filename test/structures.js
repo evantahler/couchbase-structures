@@ -434,6 +434,19 @@ describe('couchbase', function(){
       });
     });
 
+    it("popping an empty queue should not change the length", function(done){
+      var obj = new CouchbaseStructures.queue("test", bucket);
+      obj.length(function(err, length){
+        length.should.equal(0);
+        obj.pop(function(err, data){
+          obj.length(function(err, length){
+            length.should.equal(0);
+            done();
+          });
+        });
+      });
+    });
+
     it("can uniquly push many elements", function(done){
       var obj = new CouchbaseStructures.queue("test", bucket);
       obj.push({body: 'item 0'});

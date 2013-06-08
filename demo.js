@@ -5,8 +5,8 @@ var couchbase_config = {
   debug    : false,
   hosts    : [ "localhost:8091" ],
   password : "password",
-  bucket   : "demo",
-  user     : "demo"
+  bucket   : "test",
+  user     : "test"
 }
 
 couchbase.connect(couchbase_config, function(err, bucket){

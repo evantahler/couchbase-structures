@@ -590,11 +590,28 @@ describe('couchbase', function(){
 
     it("removing should reduce the length", function(done){
       var obj = new CouchbaseStructures.hash("test", bucket);
-      obj.unset("item-0", function(){
+      obj.unset("item-0", function(err){
         obj.length(function(err, length){
           should.not.exists(err);
           length.should.equal(0);
           done();
+        });
+      });
+    });
+
+    it("you can't remove elements that don't exist", function(done){
+      var obj = new CouchbaseStructures.hash("test", bucket);
+      obj.set("item-0", {body: 'something else'}, function(err){
+        obj.length(function(err, length){
+          var first_length = length
+          obj.unset("item-999999", function(err){
+            String(err).should.equal("Error: child does not exist")
+            obj.length(function(err, length){
+              first_length.should.equal(length);
+              should.not.exists(err);
+              done();
+            });
+          });
         });
       });
     });

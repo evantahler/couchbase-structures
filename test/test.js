@@ -1,6 +1,9 @@
 var should = require("should");
+var request = require("request");
 var couchbase = require("couchbase"); 
+var bootTimeout = 60 * 1000;  // travis needs a long time between buckets
 var bucket;
+var bucketCreatedAt;
 
 var CouchbaseStructures = require("./../index.js");
 
@@ -9,46 +12,48 @@ var couchbase_config = {
   "hosts" : [ "localhost:8091" ],
   "password" : "password",
   "bucket" : "test",
-  "user" : "test"
+  "user" : "test",
+  "adminUser" : "Administrator",
+  "adminPassword" : "password"
 }
 
+// as we are deleting and recreating buckets, we need to wait and retry until the bucket is ready
 var connect = function(callback){
   couchbase.connect(couchbase_config, function(err, b){
     if(err){ 
-      console.log(error);
-      process.exit();
+      // console.log(err);
+      setTimeout(connect, 1000, callback);
     }else{
       bucket = b;
-      callback()
+      bucket.set("foo", "bar", function(err){
+        if(err){
+          // console.log(err);
+          setTimeout(connect, 1000, callback);
+        }else{  
+          console.log("      ~ bucket creation took " + Math.round((new Date().getTime() - bucketCreatedAt)/1000) + "s")
+          callback();
+        }
+      });
     }
   });
 }
 
-var cleanup = function(callback){
-  var count = 0;
-  [
-    "foo", 
-    "test", 
-    "test2", 
-    "test3", 
-    "test:_counter", 
-    "test2:_counter", 
-    "test3:_counter", 
-    "test:childish",
-    "test:_readCounter",
-    "test:item-0",
-    "test:item-1",
-    "test:item-2",
-    "test:0",
-    "test:1",
-    "test:2",
-    "test:3",
-    "test:4",
-  ].forEach(function(key){
-    count++;
-    bucket.remove(key, function(){
-      count--;
-      if(count === 0){ callback(); }
+var init = function(callback){
+  bucketCreatedAt = new Date().getTime();
+  request({
+    auth: { 'user': couchbase_config.adminUser, 'pass': couchbase_config.adminPassword },
+    method: 'DELETE',
+    uri: 'http://' + couchbase_config.hosts[0] + '/pools/default/buckets/' + couchbase_config.bucket,
+  }, function(error, response, body){
+    request({
+      auth: { 'user': couchbase_config.adminUser, 'pass': couchbase_config.adminPassword },
+      method: 'POST',
+      form: { name: couchbase_config.bucket, ramQuotaMB: 100, authType: "sasl", saslPassword: couchbase_config.password, replicaNumber: 0 },
+      uri: 'http://' + couchbase_config.hosts[0] + '/pools/default/buckets',
+    }, function(error, response, body){
+      connect(function(){
+        callback();
+      });
     });
   });
 }
@@ -56,9 +61,8 @@ var cleanup = function(callback){
 describe('couchbase', function(){  
   
   before(function(done){
-    connect(function(){
-      done();
-    })
+    this.timeout(bootTimeout);
+    init(done);
   });
 
   describe('basics', function(){  
@@ -71,10 +75,6 @@ describe('couchbase', function(){
           done();
         });
       });
-    });
-
-    after(function(done){
-      cleanup(done);
     });
 
   });
@@ -235,7 +235,8 @@ describe('couchbase', function(){
   describe("Array", function(){
 
     before(function(done){
-      cleanup(done);
+      this.timeout(bootTimeout)
+      init(done);
     });
 
     it("can createa an array", function(done){
@@ -359,7 +360,8 @@ describe('couchbase', function(){
   describe("Queue", function(){
 
     before(function(done){
-      cleanup(done);
+      this.timeout(bootTimeout)
+      init(done);
     });
 
     it("can createa a list", function(done){
@@ -519,7 +521,8 @@ describe('couchbase', function(){
   describe("Hash", function(){
 
     before(function(done){
-      cleanup(done);
+      this.timeout(bootTimeout)
+      init(done);
     });
 
     it("can createa a list", function(done){

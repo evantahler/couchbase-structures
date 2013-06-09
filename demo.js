@@ -11,7 +11,7 @@ var couchbase_config = {
 
 couchbase.connect(couchbase_config, function(err, bucket){
   if(err){ 
-    console.log(error);
+    console.log(err);
     process.exit();
   }else{
 

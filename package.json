@@ -10,7 +10,8 @@
     },
     "devDependencies": {
         "mocha" : "1.10.x",
-        "should": "1.2.x"
+        "should": "1.2.x",
+        "request": "x"
     },
     "main": "index.js",
     "engines": {

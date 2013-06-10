@@ -1,6 +1,6 @@
 {
     "name": "couchbase-structures",
-    "version": "0.0.4",
+    "version": "0.0.5",
     "description": "compound data structures for couchbase built in node.js",
     "keywords": ["structures", "data structures",  "data", "structures", "array", "hash", "list", "queue", "couch", "couchbase"],
     "repository": "https://github.com/evantahler/couchbase-structures.git",

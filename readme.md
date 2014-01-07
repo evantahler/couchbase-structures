@@ -1,7 +1,7 @@
 # Couchbase Structures
 *compound data structures for couchbase built in node.js*
 
-[![Build Status](https://travis-ci.org/evantahler/couchbase-structures.png?branch=master)](https://travis-ci.org/evantahler/couchbase-structures)  [![Bitdeli Badge](https://d2weczhvl823v0.cloudfront.net/evantahler/couchbase-structures/trend.png)](https://bitdeli.com/free "Bitdeli Badge")
+[![Build Status](https://travis-ci.org/evantahler/couchbase-structures.png?branch=master)](https://travis-ci.org/evantahler/couchbase-structures)
 
 This project creates helpful wrappers around normal couchbase documents to allow you to create more complex objects.  Being couchbase, this means that your objects will be redundant and distributed!
 
